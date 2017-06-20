@@ -6,6 +6,7 @@
 # utiliser http://www.mandolintab.net/abcconverter.php pour créer des partitions avec la syntaxe abc
 
 import random
+import math
 
 notes = {'la': 440., 'si': 493.883, 'do': 293.665, 're': 311.13, 'mi': 329.628, 'fa': 349.228, 'sol': 391.995}
 liste_note = ['do', 're', 'mi', 'fa', 'sol', 'la', 'si']
@@ -40,20 +41,21 @@ def frequencificateur(tableau):
         else:
             tab.append(i[1])
         tab[int(i[0])] = same_freq(tab[i[0]])
-    for i in tab:
-        print("i : "+str(i))
-    return tableau
+    return tab
 
 
 def consonnant(accord):
     tab = frequencificateur(accord)
+    rapports = [1., 2.,  2 ** (7. / 12), 2 ** (5. / 12), 2 ** (4. / 12),  2 ** (3. / 12), 2 ** (9. / 12), 2 ** (10. / 12)]
     for i in tab:
         for j in tab:
-            rapport = int(i) / int(j)
-            # octave, quinte J, quarte J, tierce M et m et sixte
-            if rapport != 1 and rapport != 2 and rapport != 2 ** (7. / 12) and rapport != 2 ** (5. / 12) and rapport != 2 ** (4. / 12) and rapport != 2 ** (3. / 12) and rapport != 2 ** (9. / 12) and rapport != 2 ** (10. / 12):
-                return False
-    return True
+            if i != j:
+                rapport = int(i) / int(j)
+                # octave, quinte J, quarte J, tierce M et m et sixte
+                for rap in rapports:
+                    if math.isclose(rap, rapport, rel_tol=1e-3) is True:
+                        return True
+    return False
 
 
 def generer_note(hauteur):
@@ -141,11 +143,11 @@ def generer_fichier_abc(triple_table):
     file.write("[V:B1] " + ligne_abc_basse(triple_table[0]) + "|")
 
     # Début du programme
-accord_de_base = ['la3', 'si5', 334]
+accord_de_base = ['do3', 'si3']
 if consonnant(accord_de_base) is True:
     print("Ca passe trois fois !")
 else:
     print("Je l'tenterais pas")
-print("Maintenant, on génère une partition !")
-mes_trois_voix = generer_musique()
-generer_fichier_abc(mes_trois_voix)
+# print("Maintenant, on génère une partition !")
+# mes_trois_voix = generer_musique()
+# generer_fichier_abc(mes_trois_voix)
