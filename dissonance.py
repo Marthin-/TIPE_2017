@@ -13,23 +13,14 @@ dic_note_vers_abc = {'do': 'c', 're': 'd', 'mi': 'e', 'fa': 'f', 'sol': 'g', 'la
 
 
 def same_freq(f1):
-    while f1 < 440:
-        f1 *= 2
-    while f1 > 880:
-        f1 /= 2
-    return f1
-
-
-def frequencificateur(tableau):
-    for i in tableau:  # on convertit les notes en fréquences et on les alignes dans la plage  [293.665 ; 493.883]
-        if type(i) == str:
-            i = conversion(i)
-        i = same_freq(i)
-    return tableau
-
+    while f1 < 293.665:
+        f1 *= 2.
+    while f1 > 493.883:
+        f1 /= 2.
+    return float(f1)
 
 def conversion(note):  # ex la3
-    hauteur = note[1:]  # découpe la string note en ne gardant que le dernier caractère
+    hauteur = note[-1:]  # découpe la string note en ne gardant que le dernier caractère
     nom = note[:-1]  # découpe en n'enlevant que le dernier caractère
     if hauteur == "1":
         puissance = 1. / 3  # f(do1)=1/4 f(do3)
@@ -37,15 +28,28 @@ def conversion(note):  # ex la3
         puissance = 1. / 2  # f(do2)=1/2 f(do3)
     else:
         puissance = int(hauteur) - 2  # f(do<n>) = 2^n (f(do3))
-    frequence = notes[nom] ** int(puissance)
+    frequence = notes[nom] * (2 ** int(puissance))
     return frequence
+
+
+def frequencificateur(tableau):
+    tab = []
+    for i in enumerate(tableau):  # on convertit les notes en fréquences et on les alignes dans la plage  [293.665 ; 493.883]
+        if str(i[1])[:-1] in liste_note:
+            tab.append(conversion(i[1]))
+        else:
+            tab.append(i[1])
+        tab[int(i[0])] = same_freq(tab[i[0]])
+    for i in tab:
+        print("i : "+str(i))
+    return tableau
 
 
 def consonnant(accord):
     tab = frequencificateur(accord)
     for i in tab:
         for j in tab:
-            rapport = i / j
+            rapport = int(i) / int(j)
             # octave, quinte J, quarte J, tierce M et m et sixte
             if rapport != 1 and rapport != 2 and rapport != 2 ** (7. / 12) and rapport != 2 ** (5. / 12) and rapport != 2 ** (4. / 12) and rapport != 2 ** (3. / 12) and rapport != 2 ** (9. / 12) and rapport != 2 ** (10. / 12):
                 return False
@@ -93,8 +97,7 @@ def ligne_abc_basse(tableau):
             # attention à la syntaxe : On prend la clef du dictionnaire qui correspond à la note sans sa hauteur
             # ex. : dic_note_vers_abc['fa'] au lieu de fa5, pour le convertir simplement en "f"
             sortie += " "
-            sortie += dic_note_vers_abc[
-                str(tableau[i])[:-1]]  # la ligne de la complication syntaxique d'un homme aux abois
+            sortie += dic_note_vers_abc[str(tableau[i])[:-1]]  # la ligne de la complication syntaxique d'un homme aux abois
             sortie += "4"
             sortie += " |"
     return str(sortie)
@@ -114,8 +117,7 @@ def ligne_abc(tableau):
         if random.randint(0, 10) == 5:
             sortie += "z"
         else:
-            sortie += dic_note_vers_abc[
-                str(tableau[i])[:-1]]  # la ligne de la complication syntaxique d'un homme aux abois
+            sortie += dic_note_vers_abc[str(tableau[i])[:-1]]  # la ligne de la complication syntaxique d'un homme aux abois
             sortie += "'" * int(tableau[i][1:] - 2)  # aligne la hauteur avec les apostrophes en abc ( " ' " )
         if i % 2 == 1:
             sortie += " "
