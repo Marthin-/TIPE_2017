@@ -8,7 +8,7 @@
 import random
 import math
 
-notes = {'la': 440., 'si': 493.883, 'do': 293.665, 're': 311.13, 'mi': 329.628, 'fa': 349.228, 'sol': 391.995}
+notes = {'la': 440., 'si': 493.883, 'do': 261.63, 're': 293.665, 'mi': 329.628, 'fa': 349.228, 'sol': 391.995}
 liste_note = ['do', 're', 'mi', 'fa', 'sol', 'la', 'si']
 dic_note_vers_abc = {'do': 'c', 're': 'd', 'mi': 'e', 'fa': 'f', 'sol': 'g', 'la': 'a', 'si': 'b'}
 
@@ -47,13 +47,19 @@ def frequencificateur(tableau):
 def consonnant(accord):
     tab = frequencificateur(accord)
     rapports = [1., 2.,  2 ** (7. / 12), 2 ** (5. / 12), 2 ** (4. / 12),  2 ** (3. / 12), 2 ** (9. / 12), 2 ** (10. / 12)]
-    for i in tab:
-        for j in tab:
+    for i in range(0,len(tab)):
+        print("tab[i]:")
+        print(tab[i])
+        for j in range(0,len(tab)):
+            print("tab[j]:")
+            print(tab[j])
             if i != j:
-                rapport = int(i) / int(j)
+                rapport = int(tab[i]) / int(tab[j])
+                print("rapport: "+str(rapport))
                 # octave, quinte J, quarte J, tierce M et m et sixte
                 for rap in rapports:
-                    if math.isclose(rap, rapport, rel_tol=1e-3) is True:
+                    print("rap: "+str(rap))
+                    if math.isclose(rap, rapport, abs_tol=1e-3) is True:
                         return True
     return False
 
@@ -143,7 +149,7 @@ def generer_fichier_abc(triple_table):
     file.write("[V:B1] " + ligne_abc_basse(triple_table[0]) + "|")
 
     # Début du programme
-accord_de_base = ['do3', 'si3']
+accord_de_base = ['do3', 'fa3']
 if consonnant(accord_de_base) is True:
     print("Ca passe trois fois !")
 else:
