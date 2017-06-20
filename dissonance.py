@@ -47,6 +47,7 @@ def frequencificateur(tableau):
 def consonnant(accord):
     tab = frequencificateur(accord)
     rapports = [1., 2.,  2 ** (7. / 12), 2 ** (5. / 12), 2 ** (4. / 12),  2 ** (3. / 12), 2 ** (9. / 12), 2 ** (10. / 12)]
+    final = 0
     for i in range(0,len(tab)):
         print("tab[i]:")
         print(tab[i])
@@ -55,13 +56,16 @@ def consonnant(accord):
             print(tab[j])
             if i != j:
                 rapport = int(tab[i]) / int(tab[j])
-                print("rapport: "+str(rapport))
                 # octave, quinte J, quarte J, tierce M et m et sixte
                 for rap in rapports:
-                    print("rap: "+str(rap))
                     if math.isclose(rap, rapport, abs_tol=1e-3) is True:
-                        return True
-    return False
+                        final += 1
+                        print("final: " + str(final))
+    print("len(tab): "+str(len(tab)))
+    if final == len(tab):
+        return True
+    else:
+        return False
 
 
 def generer_note(hauteur):
@@ -149,7 +153,7 @@ def generer_fichier_abc(triple_table):
     file.write("[V:B1] " + ligne_abc_basse(triple_table[0]) + "|")
 
     # Début du programme
-accord_de_base = ['do3', 'fa3']
+accord_de_base = ['do4','mi4','sol4']
 if consonnant(accord_de_base) is True:
     print("Ca passe trois fois !")
 else:
