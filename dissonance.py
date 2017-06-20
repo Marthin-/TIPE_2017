@@ -1,0 +1,1 @@
+# algorithme de calcul de dissonance
