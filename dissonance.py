@@ -48,6 +48,8 @@ def consonnant(accord):
     tab = frequencificateur(accord)
     rapports = [1., 2.,  2 ** (7. / 12), 2 ** (5. / 12), 2 ** (4. / 12),  2 ** (3. / 12), 2 ** (9. / 12), 2 ** (10. / 12)]
     final = 0
+    if len(tab) == 2:
+        final += 1
     for i in range(0,len(tab)):
         print("tab[i]:")
         print(tab[i])
@@ -55,9 +57,11 @@ def consonnant(accord):
             print("tab[j]:")
             print(tab[j])
             if i != j:
-                rapport = int(tab[i]) / int(tab[j])
+                rapport = float(tab[i]) / float(tab[j])
+                print("rapport " + str(rapport))
                 # octave, quinte J, quarte J, tierce M et m et sixte
                 for rap in rapports:
+                    print("rap " +str(rap))
                     if math.isclose(rap, rapport, abs_tol=1e-3) is True:
                         final += 1
                         print("final: " + str(final))
@@ -153,11 +157,12 @@ def generer_fichier_abc(triple_table):
     file.write("[V:B1] " + ligne_abc_basse(triple_table[0]) + "|")
 
     # Début du programme
-accord_de_base = ['do4','mi4','sol4']
+accord_de_base = ['mi4','sol4']
 if consonnant(accord_de_base) is True:
     print("Ca passe trois fois !")
 else:
     print("Je l'tenterais pas")
+    print(349.228 / 261.63)
 # print("Maintenant, on génère une partition !")
 # mes_trois_voix = generer_musique()
 # generer_fichier_abc(mes_trois_voix)
