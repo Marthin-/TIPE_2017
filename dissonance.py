@@ -85,9 +85,9 @@ def generer_basse():
 
 # fonction pour générer la partie mélodique en fonction de la partie de basse
 def generer_melodie(basse):
-    melodie = [generer_note(random.randint(3, 5)), generer_note(random.randint(3, 5))]
+    melodie = [generer_note(random.randint(2, 2)), generer_note(random.randint(2, 2))]
     while consonnant(melodie + [basse]) is False:
-        melodie = [generer_note(random.randint(3, 5)), generer_note(random.randint(3, 5))]
+        melodie = [generer_note(random.randint(2, 2)), generer_note(random.randint(2, 2))]
     return melodie
 
 
@@ -134,11 +134,14 @@ def ligne_abc(tableau):
             sortie += "z"
         else:
             sortie += dic_note_vers_abc[str(tableau[i])[:-1]]  # la ligne de la complication syntaxique d'un homme aux abois
-            sortie += "'" * int(tableau[i][1:] - 2)  # aligne la hauteur avec les apostrophes en abc ( " ' " )
-        if i % 2 == 1:
+            num = int(tableau[i][-1:]) - 2
+            for octave in range(num):
+                sortie += "'"  # aligne la hauteur avec les apostrophes en abc ( " ' " )
+        if i % 2 == 0:
             sortie += " "
-        if sortie % 4 == 0:
+        if i % 4 == 3:
             sortie += "|"
+    return sortie
 
 
 # exemple output :
@@ -146,15 +149,15 @@ def ligne_abc(tableau):
 
 def generer_fichier_abc(triple_table):
     file = open('maPartition.txt', 'w')
-    file.write("X:1\nT:Douce Nuit de Printemps sur la Colline\nM:2/4\nC:Francois Gwillou\nQ:1/4=92")
-    file.write("V:T1           clef=treble  name=\"Tenore I\"   snm=\"T.I\"")
-    file.write("V:T2           clef=treble  name=\"Tenore II\"   snm=\"T.II\"")
-    file.write("V:B1  middle=d clef=bass      name=\"Basso I\"    snm=\"B.I\"  transpose=-24")
-    file.write("K:C")
-    file.write("%On commence la partition")
-    file.write("[V:T1]  " + ligne_abc(triple_table[1]) + "|")
-    file.write("[V:T2] " + ligne_abc(triple_table[2]) + "|")
-    file.write("[V:B1] " + ligne_abc_basse(triple_table[0]) + "|")
+    file.write("X:1\nT:Douce Nuit de Printemps sur la Colline\nM:2/4\nC:Francois Gwillou\nQ:1/4=92\nL:1/4\n")
+    file.write("V:T1           clef=treble-8  name=\"Tenore I\"   snm=\"T.I\"\n")
+    file.write("V:T2           clef=treble-8  name=\"Tenore II\"   snm=\"T.II\"\n")
+    file.write("V:B1  middle=d clef=bass      name=\"Basso I\"    snm=\"B.I\"  transpose=-24\n")
+    file.write("K:C\n")
+    file.write("%On commence la partition\n")
+    file.write("[V:T1]  " + ligne_abc(triple_table[1]) + "|\n")
+    file.write("[V:T2] " + ligne_abc(triple_table[2]) + "|\n")
+    file.write("[V:B1] " + ligne_abc_basse(triple_table[0]) + "|\n")
 
     # Début du programme
 accord_de_base = ['mi4','sol4']
@@ -163,6 +166,6 @@ if consonnant(accord_de_base) is True:
 else:
     print("Je l'tenterais pas")
     print(349.228 / 261.63)
-# print("Maintenant, on génère une partition !")
-# mes_trois_voix = generer_musique()
-# generer_fichier_abc(mes_trois_voix)
+print("Maintenant, on génère une partition !")
+mes_trois_voix = generer_musique()
+generer_fichier_abc(mes_trois_voix)
