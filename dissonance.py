@@ -148,7 +148,7 @@ def ligne_abc(tableau):
 # >>> f'c cd | d'e f'z | f'c zd | d'e f'g |
 
 def generer_fichier_abc(triple_table):
-    file = open('maPartition.txt', 'w')
+    file = open('./maPartition.txt', 'w')
     file.write("X:1\nT:Douce Nuit de Printemps sur la Colline\nM:2/4\nC:Francois Gwillou\nQ:1/4=92\nL:1/4\n")
     file.write("V:T1           clef=treble-8  name=\"Tenore I\"   snm=\"T.I\"\n")
     file.write("V:T2           clef=treble-8  name=\"Tenore II\"   snm=\"T.II\"\n")
